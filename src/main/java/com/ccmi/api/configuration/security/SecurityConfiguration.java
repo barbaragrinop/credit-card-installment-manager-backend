@@ -1,4 +1,4 @@
-package com.ccmi.api.configuration;
+package com.ccmi.api.configuration.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
