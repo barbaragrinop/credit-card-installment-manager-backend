@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ccmi.api.dto.AuthenticationDTO;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 @RestController
 @RequestMapping("/login")
 public class AuthenticationController {
@@ -19,9 +23,12 @@ public class AuthenticationController {
 
     @PostMapping
     public ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO user) {
-        var token = new UsernamePasswordAuthenticationToken(user.email(), user.senha());
+        var token = new UsernamePasswordAuthenticationToken(user.email(), user.password());
 
         var authentication = _authenticationManager.authenticate(token);
-        return ResponseEntity.ok("Hello World");
+        return ResponseEntity.ok("Hello");
     }
+
+    
+    
 }
