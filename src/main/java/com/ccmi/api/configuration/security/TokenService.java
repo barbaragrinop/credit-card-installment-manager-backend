@@ -32,6 +32,20 @@ public class TokenService {
         }
     }
 
+    
+    public String getSubject(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("API CCMI")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTCreationException ex) {
+            throw new RuntimeException("Token invalid or expired .", ex);
+        }
+    }
+
     public Instant getExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }

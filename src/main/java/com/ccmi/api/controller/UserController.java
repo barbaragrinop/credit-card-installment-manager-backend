@@ -32,7 +32,6 @@ public class UserController {
             return ResponseEntity.badRequest().body("User already exists!");
         }
         
-
         User userDTOToEntity = modelMapper.map(userData, User.class);
 
         userDTOToEntity.setPassword(_passwordEncoder.encode(userData.getPassword()));
