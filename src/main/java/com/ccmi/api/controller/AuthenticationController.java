@@ -8,10 +8,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import com.ccmi.api.configuration.security.TokenJWT;
 import com.ccmi.api.configuration.security.TokenService;
-import com.ccmi.api.dto.AuthenticationDTO;
+import com.ccmi.api.dto.*;
 import com.ccmi.api.entity.User;
-
 
 
 @RestController
@@ -26,15 +26,13 @@ public class AuthenticationController {
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO user) {
-        var token = new UsernamePasswordAuthenticationToken(user.email(), user.password());
+        var authToken = new UsernamePasswordAuthenticationToken(user.email(), user.password());
 
-        var authentication = _authenticationManager.authenticate(token);
-        User principal = (User) authentication.getPrincipal();
+        var authentication = _authenticationManager.authenticate(authToken);
+        var tokenJWT = _tokenService.generateToken((User) authentication.getPrincipal());
 
-        return ResponseEntity.ok(
-            _tokenService.generateToken(principal)
-        );
+        return ResponseEntity.ok(new TokenJWT(tokenJWT));
     }
 
-    
+
 }
