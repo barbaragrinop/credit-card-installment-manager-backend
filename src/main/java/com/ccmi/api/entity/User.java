@@ -1,8 +1,7 @@
 package com.ccmi.api.entity;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,6 +41,10 @@ public class User implements UserDetails {
 
     @Column(name = "birthDate", columnDefinition = "DATE")
     private LocalDate dateOfBirth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Card> cards;
+
 
     // profile control
     @Override
