@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Table(
     name = "card", 
     uniqueConstraints = @UniqueConstraint(columnNames = { "email" }
 ))
+
 @Entity(name = "Card")
 @Getter
 @Setter
@@ -31,5 +33,9 @@ public class Card {
     private String cardBrand;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false) 
     private User user;
+
+    @OneToMany(mappedBy="card", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Purchase> purchases;
 }
