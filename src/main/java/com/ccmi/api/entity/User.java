@@ -39,8 +39,8 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "birthDate", columnDefinition = "DATE")
-    private LocalDate dateOfBirth;
+    @Column(name = "birth_date", columnDefinition = "DATE")
+    private LocalDate birth_date;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Card> cards;
