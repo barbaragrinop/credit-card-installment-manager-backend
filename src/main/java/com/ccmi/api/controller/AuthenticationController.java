@@ -13,7 +13,6 @@ import com.ccmi.api.configuration.security.TokenService;
 import com.ccmi.api.dto.*;
 import com.ccmi.api.entity.User;
 
-
 @RestController
 @RequestMapping("/login")
 public class AuthenticationController {
@@ -28,9 +27,19 @@ public class AuthenticationController {
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO user) {
         var authToken = new UsernamePasswordAuthenticationToken(user.email(), user.password());
 
-        var authentication = _authenticationManager.authenticate(authToken);
-        var tokenJWT = _tokenService.generateToken((User) authentication.getPrincipal());
+        try {
+            var authentication = _authenticationManager.authenticate(authToken);
+            var tokenJWT = _tokenService.generateToken((User) authentication.getPrincipal());
 
-        return ResponseEntity.ok(new TokenJWT(tokenJWT));
+            if (tokenJWT == null) {
+                return ResponseEntity.badRequest().body("E-mail ou senha inválidos!");
+            }
+
+            return ResponseEntity.ok(new TokenJWT(tokenJWT));
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("E-mail ou senha inválidos!");
+        }
+
     }
 }

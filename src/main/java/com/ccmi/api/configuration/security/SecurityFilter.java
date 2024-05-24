@@ -31,21 +31,21 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         var token = extractToken(request);
 
-        if (token != null) { //if then is not null
-            var subject = _tokenService.getSubject(token); //get the subject 
+        if (token != null) { // If the token is not null
+            var subject = _tokenService.getSubject(token); // Get the subject from the token
 
-            var user = _userRepository.findByEmail(subject); //find the user by email
+            var user = _userRepository.findByEmail(subject); // Find the user by email
 
-            // create a DTO that represents the user
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            if (user != null) { // Check if the user is found
+                // Create an authentication token
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
-            // set the authentication in the context
-            // force an authentication
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
+                // Set the authentication in the context to force authentication
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
-        
-        // continue the filter chain (next
+
+        // Continue the filter chain
         filterChain.doFilter(request, response);
     }
 
@@ -58,5 +58,4 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         return null;
     }
-
 }
