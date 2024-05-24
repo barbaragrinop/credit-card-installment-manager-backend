@@ -19,7 +19,13 @@ public class UserService {
     }
 
     public boolean findUserByEmail(String email) {
-        return _userRepository.findByEmail(email) != null;
+        var user = _userRepository.findByEmail(email);
+        
+        if(user == null) {
+            return false;
+        }
+
+        return true;
     }
 
 }
