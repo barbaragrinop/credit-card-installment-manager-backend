@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 import lombok.EqualsAndHashCode;
@@ -40,8 +42,9 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "birth_date", columnDefinition = "DATE")
-    private LocalDate birth_date;
+    private LocalDate birthDate;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Card> cards;
 

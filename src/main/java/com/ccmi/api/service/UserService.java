@@ -1,6 +1,7 @@
 package com.ccmi.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -26,6 +27,12 @@ public class UserService {
         }
 
         return true;
+    }
+
+    public User getUserDataByEmail(String email) {
+        UserDetails user = _userRepository.findByEmail(email);
+        
+        return (User) user;
     }
 
 }

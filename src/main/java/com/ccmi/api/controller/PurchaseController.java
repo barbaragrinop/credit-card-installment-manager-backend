@@ -2,13 +2,10 @@ package com.ccmi.api.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ccmi.api.dto.PurchaseDTO;
-import com.ccmi.api.entity.Purchase;
-import com.ccmi.api.entity.User;
 import com.ccmi.api.service.UserService;
 
 

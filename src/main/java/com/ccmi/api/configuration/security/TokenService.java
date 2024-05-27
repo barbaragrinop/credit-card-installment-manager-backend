@@ -19,12 +19,15 @@ public class TokenService {
     private String secret;
 
     public String generateToken(User user) {
+
         try {
             Algorithm algorithm = Algorithm.HMAC256(
                     secret);
             return JWT.create()
                     .withIssuer("API CCMI")
-                    .withSubject(user.getEmail())
+                    .withClaim("id", user.getId())
+                    .withClaim("name", user.getName())
+                    .withSubject( user.getEmail())
                     .withExpiresAt(getExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException ex) {

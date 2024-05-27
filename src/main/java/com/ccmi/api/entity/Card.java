@@ -2,14 +2,11 @@ package com.ccmi.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
-@Table(
-    name = "card", 
-    uniqueConstraints = @UniqueConstraint(columnNames = { "email" }
-))
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Table(name = "card", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
 
 @Entity(name = "Card")
 @Getter
@@ -26,16 +23,18 @@ public class Card {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "dueDate", columnDefinition = "DATE", nullable = false)
-    private LocalDate dueDate;
+    @Column(name = "dueDay", nullable = false)
+    private Integer dueDay;
 
     @Column(name = "cardBrand", nullable = false)
     private String cardBrand;
 
+    
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) 
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy="card", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Purchase> purchases;
 }
