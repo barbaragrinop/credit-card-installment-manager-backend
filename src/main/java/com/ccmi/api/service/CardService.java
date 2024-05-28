@@ -25,4 +25,8 @@ public class CardService {
         return _cardRepository.findAllByUserId(userId);
     }
 
+    public Card updateCard(Card card) {
+        return _cardRepository.save(card);
+    }
+
 }

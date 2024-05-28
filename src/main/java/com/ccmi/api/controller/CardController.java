@@ -61,4 +61,27 @@ public class CardController {
     public ResponseEntity<List<Card>> getCardsByUserId(@RequestParam Long userId) {
         return ResponseEntity.ok(_cardService.getCardsByUserId(userId));
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateCard(@RequestBody CardDTO card) {
+        Card entity = _mapper.map(card, Card.class);
+
+        User user = _userService.getUserDataByEmail(card.getUserEmail());
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Usuário inválido!");
+        }
+
+        entity.setUser(user);
+
+        Card updatedCard = _cardService.updateCard(entity);
+
+        CardDTO updatedCardDTO = _mapper.map(updatedCard, CardDTO.class);
+
+        if (updatedCard == null) {
+            return ResponseEntity.badRequest().body("Cartão não pode ser atualizado!");
+        }
+
+        return ResponseEntity.ok(updatedCardDTO);
+    }
 }
