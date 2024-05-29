@@ -87,15 +87,10 @@ public class CardController {
 
     @DeleteMapping
     public ResponseEntity<String> deleteCard(@RequestParam Long id) {
-        Card card = _cardService.getCardById(id);
-
-        if (card == null) {
-            return ResponseEntity.badRequest().body("Cartão não encontrado!");
-        }
-
+      
         boolean isCardDeleted = _cardService.deleteCard(id);
 
-        if(!isCardDeleted){
+        if(isCardDeleted == false){
             return ResponseEntity.badRequest().body("Cartão não pode ser deletado!");
         }
 
