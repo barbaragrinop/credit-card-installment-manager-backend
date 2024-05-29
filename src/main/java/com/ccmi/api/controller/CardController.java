@@ -84,4 +84,22 @@ public class CardController {
 
         return ResponseEntity.ok(updatedCardDTO);
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteCard(@RequestParam Long id) {
+        Card card = _cardService.getCardById(id);
+
+        if (card == null) {
+            return ResponseEntity.badRequest().body("Cartão não encontrado!");
+        }
+
+        boolean isCardDeleted = _cardService.deleteCard(id);
+
+        if(!isCardDeleted){
+            return ResponseEntity.badRequest().body("Cartão não pode ser deletado!");
+        }
+
+        return ResponseEntity.ok("Cartão deletado com sucesso!");
+    }
 }
+  

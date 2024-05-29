@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 
 public class CardDTO {
+    private Long id;
     private String name;
     private Integer dueDay;
     private String cardBrand;
