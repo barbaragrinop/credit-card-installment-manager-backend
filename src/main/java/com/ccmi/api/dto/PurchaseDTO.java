@@ -22,6 +22,5 @@ public class PurchaseDTO implements Serializable {
 
     private String productName;
 
-    // private Card card;
 }
 

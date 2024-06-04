@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Table(name = "card", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
+@Table(name = "card", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
 
 @Entity(name = "Card")
 @Getter
@@ -19,6 +19,8 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    //unique field
 
     @Column(name = "name", nullable = false)
     private String name;

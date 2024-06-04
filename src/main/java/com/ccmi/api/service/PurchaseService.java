@@ -14,9 +14,12 @@ public class PurchaseService {
 
     public PurchaseService() { }
 
-    public void createPurchase(Purchase purchase) {
-        _purchaseRepository.save(purchase);
+    public Purchase createPurchase(Purchase purchase) {
+        return _purchaseRepository.save(purchase);
     }
+
+
+
 
     
 }

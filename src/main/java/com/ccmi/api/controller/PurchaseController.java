@@ -1,44 +1,45 @@
 package com.ccmi.api.controller;
 
+import java.net.URI;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ccmi.api.dto.PurchaseDTO;
-import com.ccmi.api.service.UserService;
-
+import com.ccmi.api.entity.Purchase;
+import com.ccmi.api.service.PurchaseService;
 
 @RestController
 @RequestMapping("/purchase")
 public class PurchaseController {
 
     @Autowired
-    private UserService _userService;
+    private PurchaseService _purchaseService;
 
     @Autowired
     private ModelMapper _modelMapper;
 
     @PostMapping
-    public ResponseEntity<?> createPurchase(@RequestBody PurchaseDTO purchaseDTO) {
+    public ResponseEntity<PurchaseDTO> createPurchase(@RequestBody PurchaseDTO purchaseDTO) {
 
-        
+        Purchase purchaseEntity = _modelMapper.map(purchaseDTO, Purchase.class);
 
-        // User user = _userService.findUserByEmail(purchaseDTO.getUser_email());
+        Purchase createdPurchase = _purchaseService.createPurchase(purchaseEntity);
 
-        // if(user == null) {
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
-        // }
+        if(createdPurchase == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        PurchaseDTO createdPurchaseDTO = _modelMapper.map(createdPurchase, PurchaseDTO.class);
 
-        // Purchase purchaseEntity = _modelMapper.map(purchaseDTO, Purchase.class);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(createdPurchaseDTO.getId()).toUri();
 
-        // purchaseEntity.set(user);
-        
-
-
-
-        return ResponseEntity.ok(purchaseDTO);
+        return ResponseEntity.created(location).body(createdPurchaseDTO);
     }
-    
+
 }
