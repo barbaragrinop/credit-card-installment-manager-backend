@@ -14,8 +14,7 @@ public class CardService {
     @Autowired
     private CardRepository _cardRepository;
 
-    public CardService() {
-    }
+    public CardService() { }
 
     public Card createCard(Card card) {
         return _cardRepository.save(card);
@@ -58,7 +57,16 @@ public class CardService {
     }
 
     public boolean verifyCardExists(String name) {
-        boolean exists =  _cardRepository.findByName(name);
-        return exists;
+        Card exists = _cardRepository.findByName(name);
+
+        if (exists == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Card getCardByName(String name) {
+        return _cardRepository.findByName(name);
     }
 }

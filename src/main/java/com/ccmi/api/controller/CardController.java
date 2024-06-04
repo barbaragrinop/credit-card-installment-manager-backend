@@ -32,11 +32,11 @@ public class CardController {
     @PostMapping
     public ResponseEntity<?> createCard(@RequestBody CardDTO card) {
 
-        boolean cardExists = _cardService.verifyCardExists(card.getName());
+        // boolean cardExists = _cardService.verifyCardExists(card.getName());
 
-        if(cardExists == true) { 
-            return ResponseEntity.badRequest().body("Nome do cartão já cadastrado!");
-        }
+        // if(cardExists == true) { 
+        //     return ResponseEntity.badRequest().body("Nome do cartão já cadastrado!");
+        // }
 
         Card entity = _mapper.map(card, Card.class);
 

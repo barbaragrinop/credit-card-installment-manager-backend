@@ -10,17 +10,19 @@ import java.time.LocalDate;
 @Setter
 
 public class PurchaseDTO implements Serializable {
-
     private Long id;
     
     private LocalDate date;
 
     private Integer installments;
+
     private String store;
 
     private Double value;
 
     private String productName;
+
+    private String cardName;
 
 }
 

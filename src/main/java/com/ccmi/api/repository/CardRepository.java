@@ -12,6 +12,7 @@ import java.util.List;
 public interface CardRepository extends JpaRepository<Card, Long> {
     List<Card> findAllByUserId(Long userId);
 
-    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Card c WHERE c.name = :name")
-    boolean findByName(String name);
+    @Query("SELECT * FROM Card c WHERE c.name = :name")
+    Card findByName(String name);
+
 }

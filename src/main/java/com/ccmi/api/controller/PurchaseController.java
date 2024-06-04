@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ccmi.api.dto.PurchaseDTO;
+import com.ccmi.api.entity.Card;
 import com.ccmi.api.entity.Purchase;
+import com.ccmi.api.repository.CardRepository;
+import com.ccmi.api.service.CardService;
 import com.ccmi.api.service.PurchaseService;
 
 @RestController
@@ -20,12 +23,23 @@ public class PurchaseController {
     private PurchaseService _purchaseService;
 
     @Autowired
+    private CardService _cardService;
+
+    @Autowired
     private ModelMapper _modelMapper;
 
     @PostMapping
     public ResponseEntity<PurchaseDTO> createPurchase(@RequestBody PurchaseDTO purchaseDTO) {
 
+        Card card = _cardService.getCardByName(purchaseDTO.getCardName());
+
+        if(card == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Purchase purchaseEntity = _modelMapper.map(purchaseDTO, Purchase.class);
+
+        purchaseEntity.setCard(card);
 
         Purchase createdPurchase = _purchaseService.createPurchase(purchaseEntity);
 
