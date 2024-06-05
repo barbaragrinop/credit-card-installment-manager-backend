@@ -2,6 +2,8 @@ package com.ccmi.api.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +73,7 @@ public class PurchaseController {
 
         PurchaseDTO purchaseDTO = _modelMapper.map(purchase, PurchaseDTO.class);
 
-        return ResponseEntity.ok(purchaseDTO);
+        return ResponseEntity.ok(purchaseDTO);  
     }
 
     @GetMapping("/get-purchases-by-userId")
@@ -84,9 +86,14 @@ public class PurchaseController {
 
         List<Purchase> purchases = _purchaseService.getPurchasesByUserId(userId);
 
-        
+        var currentMonth = java.time.LocalDate.now().getMonthValue();
 
-        return ResponseEntity.ok(purchases);
+        List<Purchase> updatedPurchases = purchases
+            .stream()
+            .filter(purchase -> purchase.getDate().getMonthValue() >= currentMonth)
+            .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok(updatedPurchases);
     }
-
 }
