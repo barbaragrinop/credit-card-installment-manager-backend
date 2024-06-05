@@ -1,5 +1,8 @@
 package com.ccmi.api.service;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,12 @@ public class PurchaseService {
         return _purchaseRepository.save(purchase);
     }
 
+    public Purchase getPurchaseById(Long id) {
+        return _purchaseRepository.findById(id).orElse(null);
+    }
 
+    public List<Purchase> getPurchasesByUserId(Long userId) {
+        return _purchaseRepository.findByUserId(userId);
+    }
 
-
-    
 }

@@ -66,7 +66,4 @@ public class CardService {
         return true;
     }
 
-    public Card getCardByName(String name) {
-        return _cardRepository.findByName(name);
-    }
 }

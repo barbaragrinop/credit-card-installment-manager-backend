@@ -16,10 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Table(
-    name = "user", 
-    uniqueConstraints = @UniqueConstraint(columnNames = { "email" }
-))
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
 @Entity(name = "User")
 @Getter
 @Setter
@@ -45,14 +42,13 @@ public class User implements UserDetails {
     private LocalDate birthDate;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Card> cards;
 
-
-    // profile control
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -60,11 +56,10 @@ public class User implements UserDetails {
         return email;
     }
 
-    @Override 
-    public String getPassword(){
+    @Override
+    public String getPassword() {
         return password;
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

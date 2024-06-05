@@ -22,7 +22,7 @@ public class PurchaseDTO implements Serializable {
 
     private String productName;
 
-    private String cardName;
+    private Long cardId;
 
 }
 
