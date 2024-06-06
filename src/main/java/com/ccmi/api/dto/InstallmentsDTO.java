@@ -12,6 +12,6 @@ public class InstallmentsDTO extends PurchaseDTO {
     private Integer installmentsLeft;
     private LocalDate lastInstallmentDate;
     private Integer installmentsPaid;
-    private Map<String, Boolean> months; // Adicionando o campo months
+    private Map<String, Map<String, Object>> months;
     private CardDTO card;
 }

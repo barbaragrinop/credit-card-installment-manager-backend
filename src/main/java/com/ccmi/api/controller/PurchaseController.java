@@ -90,6 +90,7 @@ public class PurchaseController {
         }
 
         List<Purchase> purchases = _purchaseService.getPurchasesByUserId(userId);
+        int currentYear = LocalDate.now().getYear();
 
         List<InstallmentsDTO> months = purchases.stream().map(purchase -> {
 
@@ -113,31 +114,39 @@ public class PurchaseController {
 
             int dueDay = card.getDueDay();
 
-            // Calculate the installments paid based on the card's due day
             int installmentsPaid = 0;
             LocalDate currentDueDate = purchaseDate.withDayOfMonth(dueDay);
-
             if (purchaseDate.getDayOfMonth() > dueDay) {
                 currentDueDate = currentDueDate.plusMonths(1);
             }
-
             while (!currentDueDate.isAfter(now) && installmentsPaid < totalInstallments) {
                 installmentsPaid++;
                 currentDueDate = currentDueDate.plusMonths(1);
             }
 
             int installmentsLeft = totalInstallments - installmentsPaid;
-
             installmentsDTO.setInstallmentsPaid(installmentsPaid);
             installmentsDTO.setInstallmentsLeft(installmentsLeft);
             installmentsDTO.setLastInstallmentDate(lastInstallmentDate);
 
-            // Calculate the months and whether they have been paid
-            Map<String, Boolean> monthStatus = new LinkedHashMap<>();
+            Map<String, Map<String, Object>> monthStatus = new LinkedHashMap<>();
             LocalDate tempDate = purchaseDate;
+            if (purchaseDate.getDayOfMonth() > dueDay) {
+                tempDate = tempDate.plusMonths(1);
+            }
+            tempDate = tempDate.withDayOfMonth(dueDay);
+
             for (int i = 0; i < totalInstallments; i++) {
-                String month = tempDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
-                monthStatus.put(month, !tempDate.isAfter(now));
+                int tempYear = tempDate.getYear();
+                if (tempYear == currentYear) {
+                    String month = tempDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
+                    Map<String, Object> details = new LinkedHashMap<>();
+                    boolean isPaid = !tempDate.isAfter(now);
+                    details.put("isPaid", isPaid);
+                    details.put("payDay", isPaid ? tempDate : null);
+                    details.put("installmentNumber", i + 1);
+                    monthStatus.put(month, details);
+                }
                 tempDate = tempDate.plusMonths(1);
             }
 
