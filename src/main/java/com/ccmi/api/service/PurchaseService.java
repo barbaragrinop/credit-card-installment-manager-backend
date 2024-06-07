@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ccmi.api.dto.InstallmentsDTO;
 import com.ccmi.api.entity.Purchase;
 import com.ccmi.api.repository.PurchaseRepository;
 
@@ -27,6 +28,10 @@ public class PurchaseService {
 
     public List<Purchase> getPurchasesByUserId(Long userId) {
         return _purchaseRepository.findByUserId(userId);
+    }
+
+    public List<InstallmentsDTO> getCardInstallmentsByCardId(Long cardId) {
+        return _purchaseRepository.findByCardId(cardId);
     }
 
 }

@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
+import java.text.NumberFormat;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -85,6 +87,11 @@ public class PurchaseController {
     public ResponseEntity<?> getPurchasesByUserId(@RequestParam Long userId) {
         boolean userExists = _userRepository.existsById(userId);
 
+        Locale brazilLocale = new Locale("pt", "BR");
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(brazilLocale);
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+
         if (!userExists) {
             return ResponseEntity.badRequest().build();
         }
@@ -150,11 +157,40 @@ public class PurchaseController {
                 tempDate = tempDate.plusMonths(1);
             }
 
+           // Format and parse value per installment
+           String valuePerInstallment = numberFormat.format(purchase.getValue() / totalInstallments);
+           installmentsDTO.setValuePerInstallment(valuePerInstallment);
+   
+           // Format and set value left
+           String valueLeft = numberFormat.format((purchase.getValue() / totalInstallments) * installmentsLeft);
+           installmentsDTO.setValueLeft(valueLeft);
+   
+           // Format and set value paid
+           String valuePaid = numberFormat.format((purchase.getValue() / totalInstallments) * installmentsPaid);
+           installmentsDTO.setValuePaid(valuePaid);
+
             installmentsDTO.setMonths(monthStatus);
 
             return installmentsDTO;
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(months);
+    }
+
+    @GetMapping("/get-purchases-by-cardId/{cardId}")
+    public ResponseEntity<List<InstallmentsDTO>> getPurchaseByCardId(@PathVariable Long cardId) {
+        Card cardExists = _cardService.getCardById(cardId);
+
+        if(cardExists == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        List<InstallmentsDTO> purchases = _purchaseService.getCardInstallmentsByCardId(cardId);
+
+        if (purchases == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(purchases);
     }
 }

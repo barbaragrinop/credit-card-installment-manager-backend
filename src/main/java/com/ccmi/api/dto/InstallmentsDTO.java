@@ -12,6 +12,9 @@ public class InstallmentsDTO extends PurchaseDTO {
     private Integer installmentsLeft;
     private LocalDate lastInstallmentDate;
     private Integer installmentsPaid;
-    private Map<String, Map<String, Object>> months;
+    private String valuePerInstallment;
+    private String valueLeft;
+    private String valuePaid;
+    private Map<String, Map<String, Object>> months; 
     private CardDTO card;
 }
